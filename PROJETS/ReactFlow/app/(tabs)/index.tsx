@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { useState } from 'react';
 
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
@@ -7,10 +8,13 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
 
+
 export default function HomeScreen() {
+  const [count, setCount] = useState(0);
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: '#c0caca', dark: '#151f22' }}
       headerImage={
         <Image
           source={require('@/assets/images/partial-react-logo.png')}
@@ -20,6 +24,14 @@ export default function HomeScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
+      </ThemedView>
+      <ThemedView style={styles.counterContainer}>
+        <TouchableOpacity onPress={() => setCount(count + 1)} activeOpacity={0.7}>
+          <ThemedText type="title" style={styles.counterText}>
+            {count}
+          </ThemedText>
+        </TouchableOpacity>
+        <ThemedText style={styles.counterLabel}>Tap to ground up</ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
@@ -74,6 +86,16 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
         </ThemedText>
       </ThemedView>
+      <ThemedView style={styles.counterContainer}>
+        <TouchableOpacity onPress={() => setCount(count + 1)} activeOpacity={0.7}>
+          <ThemedText type="title" style={styles.counterText}>
+            {count}
+          </ThemedText>
+        </TouchableOpacity>
+        <ThemedText style={styles.counterLabel}>Tap to ground up</ThemedText>
+      </ThemedView>
+
+
     </ParallaxScrollView>
   );
 }
@@ -87,6 +109,22 @@ const styles = StyleSheet.create({
   stepContainer: {
     gap: 8,
     marginBottom: 8,
+  },
+  counterContainer: {
+    alignItems: 'center',
+    padding: 20,
+    marginTop: 20,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+  },
+  counterText: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  counterLabel: {
+    marginTop: 8,
+    opacity: 0.8,
   },
   reactLogo: {
     height: 178,
