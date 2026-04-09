@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
 
 import { HelloWave } from '@/components/hello-wave';
@@ -8,94 +8,79 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
 
-
 export default function HomeScreen() {
   const [count, setCount] = useState(0);
+  const [articleCounts, setArticleCounts] = useState<Record<number, number>>({});
+
+  const articles = [
+    { id: 1, title: 'Article sur le Cameroun' },
+    { id: 2, title: 'Article sur la Technologie' },
+    { id: 3, title: 'Article sur React Native' },
+  ];
+
+  const incrementArticle = (id: number) => {
+    setArticleCounts(prev => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1
+    }));
+  };
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#c0caca', dark: '#151f22' }}
+      headerBackgroundColor={{ light: '#c7cec9', dark: '#2a5968' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+          source={require('@/assets/images/sombrero-de-graduado-azul-adulto-216215-2.webp')}
+          style={StyleSheet.absoluteFill}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+      }
+    >
+      <View style={styles.articlesContainer}>
+        {articles.map((article) => (
+          <TouchableOpacity
+            key={article.id}
+            onPress={() => incrementArticle(article.id)}
+            activeOpacity={0.7}
+            style={styles.articleButton}
+          >
+            <ThemedText type="title" style={styles.articleTitle}>
+              {article.title}
+            </ThemedText>
+            <ThemedText type="defaultSemiBold" style={styles.articleCount}>
+              Compteur: {articleCounts[article.id] || 0}
+            </ThemedText>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <View style={styles.camerounSection}>
+        <Text style={styles.camerounText}>Cameroun</Text>
+        <Image
+          source={{
+            uri: 'https://imgs.search.brave.com/awB9O3hLj6CqxMEvew1xZxjh6Ui0f9h7sfniXbAjoDk/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRpYS5pc3RvY2twaG90by5jb20vaWQvNTgzNzM2MjUwL2ZyL3Bob3RvL2NhbWVyb3VuLSVDMyVBOXBpbmdsJUMzJUE5LXN1ci1sYS1jYXJ0ZS1hdmVjLWRyYXBlYXUuanBnP3M9NjEyXDYxMiZ3PTAmaz0yMCZjPWhYNmVVQVJxS2RrbDJjRnNVeGh0UjZudFRXbnBBMFhTLUV5WHVJTUlSQ3M9',
+          }}
+          style={styles.camerounImage}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="ENTREZ UN COMMENTAIRE SUR LE PAYS"
+          multiline
+        />
+      </View>
+
+      <ThemedView style={styles.counterContainer}>
+        <TouchableOpacity onPress={() => setCount(count + 10)} activeOpacity={0.7}>
+          <ThemedText type="title" style={styles.counterText}>
+            {count}
+          </ThemedText>
+        </TouchableOpacity>
+        <ThemedText style={styles.counterLabel}>Tap to count up</ThemedText>
+      </ThemedView>
+
+      <View style={styles.stepContainer}>
+        <ThemedText type="title">Made with love</ThemedText>
         <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.counterContainer}>
-        <TouchableOpacity onPress={() => setCount(count + 1)} activeOpacity={0.7}>
-          <ThemedText type="title" style={styles.counterText}>
-            {count}
-          </ThemedText>
-        </TouchableOpacity>
-        <ThemedText style={styles.counterLabel}>Tap to ground up</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.counterContainer}>
-        <TouchableOpacity onPress={() => setCount(count + 1)} activeOpacity={0.7}>
-          <ThemedText type="title" style={styles.counterText}>
-            {count}
-          </ThemedText>
-        </TouchableOpacity>
-        <ThemedText style={styles.counterLabel}>Tap to ground up</ThemedText>
-      </ThemedView>
-
-
+      </View>
     </ParallaxScrollView>
   );
 }
@@ -110,12 +95,64 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 8,
   },
+  articlesContainer: {
+    gap: 12,
+    marginBottom: 20,
+    paddingHorizontal: 20,
+  },
+  articleButton: {
+    padding: 20,
+    borderRadius: 12,
+    backgroundColor: 'rgba(59, 130, 246, 0.9)',
+    alignItems: 'center',
+  },
+  articleTitle: {
+    fontSize: 18,
+    marginBottom: 8,
+  },
+  articleCount: {
+    fontSize: 24,
+  },
+  camerounSection: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  },
+  camerounText: {
+    backgroundColor: 'red',
+    fontFamily: 'Cochin',
+    fontSize: 24,
+    padding: 10,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  camerounImage: {
+    borderWidth: 10,
+    borderColor: 'black',
+    width: '100%',
+    height: 300,
+    borderRadius: 12,
+    marginBottom: 15,
+  },
+  textInput: {
+    height: 120,
+    borderColor: '#ccc',
+    borderWidth: 2,
+    padding: 15,
+    marginBottom: 20,
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
   counterContainer: {
     alignItems: 'center',
     padding: 20,
     marginTop: 20,
     borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(127, 205, 219, 0.95)',
   },
   counterText: {
     fontSize: 48,
@@ -126,11 +163,5 @@ const styles = StyleSheet.create({
     marginTop: 8,
     opacity: 0.8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
 });
+
