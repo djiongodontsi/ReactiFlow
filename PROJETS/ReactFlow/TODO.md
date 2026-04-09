@@ -1,21 +1,15 @@
-# TODO List for Fixing Errors in ReactFlow App
+# Fix Erreurs Expo Router - Duplicate Tabs
 
-## Current Task: Fix compilation/runtime errors (approved plan) - COMPLETE
+## Current Issue:
+**Screen names must be unique: profile appears twice**
 
-**Breakdown into steps:**
+## Steps to complete:
 
-1. ✅ **Plan confirmed**: User approved "OUI".
-2. ✅ **Create TODO.md**: Tracked progress.
-3. ✅ **Analyze files**: index.tsx, package.json, eslint.config.js, TODO.md.
-4. ✅ **Edit app/(tabs)/index.tsx**: Fixed imports, StyleSheet syntax, layout (no nested ScrollView), assets, TextInput native blur/shadow.
-5. ✅ **Edit eslint.config.js**: Fixed require path.
-6. ✅ **Test ready**: Run `npx expo start --clear`.
-7. ✅ **Update TODO.md**: All edits done.
-8. ✅ **Complete**: App should now compile without syntax errors.
+### 1. [x] Update TODO.md with fix steps
+### 2. [x] Fix duplicate profile tab in app/(tabs)/_layout.tsx
+### 3. [x] Update contacts.tsx to import data from contactsData.ts
+### 4. [ ] Run `cd PROJETS/ReactFlow && npx expo install --fix`
+### 5. [ ] Run `npx expo start --clear` to test
+### 6. [ ] Mark as complete
 
-**Status: Fixed! No more syntax issues. Test the app.**
-
-## Next Steps (if needed):
-- Add more features.
-- Style improvements.
-
+Progress: Fixing routing error.
