@@ -1,136 +1,74 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { useState } from 'react';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
+import React, { useEffect, useState } from 'react';
+import { FlatList, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
-
+import ParallaxScrollView from '@/components/parallax-scroll-view';
+import { CourseCard } from '@/components/ui/course-card';
+import { getCourses } from '@/data/meditationData';
+import { ActivityIndicator } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useThemeColor } from '@/hooks/use-theme-color';
 
 export default function HomeScreen() {
-  const [count, setCount] = useState(0);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getCourses().then(setCourses).finally(() => setLoading(false));
+  }, []);
+
+  const gradientStart = useThemeColor({}, 'gradientStart');
+  const gradientEnd = useThemeColor({}, 'gradientEnd');
+
+  if (loading) {
+    return (
+      <LinearGradient colors={[gradientStart, gradientEnd]} className="flex-1">
+        <ActivityIndicator className="flex-1 justify-center" size="large" color="#8B5CF6" />
+      </LinearGradient>
+    );
+  }
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#c0caca', dark: '#151f22' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+      headerBackgroundColor={{ light: '#f8fafc', dark: gradientStart }}
+      parallaxHeaderHeight={250}
+      renderFixedHeader={() => (
+        <LinearGradient
+          colors={[gradientStart, gradientEnd]}
+          className="h-64 items-center justify-center px-8"
+        >
+          <ThemedText type="title" className="text-4xl font-bold text-center mb-4">
+            Meditation
+          </ThemedText>
+          <ThemedText className="text-xl opacity-90 text-center px-8">
+            Find peace in every breath. Browse courses and start your journey.
+          </ThemedText>
+        </LinearGradient>
+      )}
+    >
+      <ThemedView className="p-4">
+        <ThemedText type="subtitle" className="mb-4">
+          Featured Courses
+        </ThemedText>
+        <FlatList
+          data={courses.slice(0, 4)}
+          renderItem={({ item }) => <CourseCard course={item} />}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: 16, paddingHorizontal: 8 }}
+          keyExtractor={(item) => item.id}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.counterContainer}>
-        <TouchableOpacity onPress={() => setCount(count + 1)} activeOpacity={0.7}>
-          <ThemedText type="title" style={styles.counterText}>
-            {count}
-          </ThemedText>
-        </TouchableOpacity>
-        <ThemedText style={styles.counterLabel}>Tap to ground up</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
+        <ThemedText type="subtitle" className="mt-8 mb-4">
+          All Courses
         </ThemedText>
+        <FlatList
+          data={courses}
+          renderItem={({ item }) => <CourseCard course={item} />}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <View className="h-4" />}
+        />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.counterContainer}>
-        <TouchableOpacity onPress={() => setCount(count + 1)} activeOpacity={0.7}>
-          <ThemedText type="title" style={styles.counterText}>
-            {count}
-          </ThemedText>
-        </TouchableOpacity>
-        <ThemedText style={styles.counterLabel}>Tap to ground up</ThemedText>
-      </ThemedView>
-
-
     </ParallaxScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  counterContainer: {
-    alignItems: 'center',
-    padding: 20,
-    marginTop: 20,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-  },
-  counterText: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  counterLabel: {
-    marginTop: 8,
-    opacity: 0.8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
