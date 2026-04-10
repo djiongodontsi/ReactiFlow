@@ -1,15 +1,16 @@
 import React from 'react';
-import { useLocalSearchParams } from 'expo-router';
-import { FlatList, View } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { FlatList, View, TouchableOpacity } from 'react-native';
+import { Headphones } from 'lucide-react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CourseCard } from '@/components/ui/course-card';
 import { getCourseById } from '@/data/meditationData';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 
 export default function CourseDetailsScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
+    const router = useRouter();
     const [course, setCourse] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -30,17 +31,21 @@ export default function CourseDetailsScreen() {
     }
 
     const renderSession = ({ item }: { item: any }) => (
-        <View className="p-4 border-b border-white/10">
-            <ThemedText type="title" className="mb-2">
+        <TouchableOpacity
+            className="p-6 border-b border-white/10"
+            onPress={() => router.push(`/player/${item.id}`)}
+        >
+            <ThemedText type="title" className="mb-3">
                 {item.title}
             </ThemedText>
-            <ThemedText className="opacity-70 mb-2">
-                {item.duration} min
+            <ThemedText className="opacity-70 mb-4">
+                {item.duration} min session
             </ThemedText>
-            <ThemedText className="opacity-60 text-xs">
-                Tap to play session
-            </ThemedText>
-        </View>
+            <ThemedView className="flex-row items-center gap-2 px-4 py-3 rounded-xl bg-white/5">
+                <Headphones size={20} color="#8B5CF6" />
+                <ThemedText className="font-medium">Play Session</ThemedText>
+            </ThemedView>
+        </TouchableOpacity>
     );
 
     return (

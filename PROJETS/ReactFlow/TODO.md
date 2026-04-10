@@ -20,4 +20,4 @@ Current progress: Planning complete. User approved.
 15. Test: expo start, verify navigation/audio/UI.
 16. **✅** Mark complete with attempt_completion.
 
-Next step: 15/16 (app complete, test with `cd PROJETS\\ReactFlow && npx expo start`, manual install `npx expo install expo-av lucide-react-native expo-linear-gradient @react-native-async-storage/async-storage @tanstack/react-query @react-native-community/slider`)
+✅ Complete! Fixed syntax error in index.tsx. Run `cd PROJETS\\ReactFlow && npx expo start`.

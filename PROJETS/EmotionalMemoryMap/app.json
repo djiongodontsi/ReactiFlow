@@ -1,0 +1,21 @@
+{
+    "expo": {
+        "name": "Emotional Memory Map",
+        "slug": "emotional-memory-map",
+        "version": "1.0.0",
+        "scheme": "emotionalmemorymap",
+        "platforms": [
+            "ios",
+            "android",
+            "web"
+        ],
+        "sdkVersion": "54.0.0",
+        "orientation": "portrait",
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ]
+    }
+}
